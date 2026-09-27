@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Production / build artifacts
+dist/
+frontend/dist/
+target/
+backend/target/
+*.jar
+*.war
+
+# Logs
+*.log
+backend_err.log
+backend_out.log
+
+# Environment files with sensitive credentials
+.env
+.env.local
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+backend/.env
+backend/.env.local
+
+# IDE & OS
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db

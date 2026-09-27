@@ -1,0 +1,457 @@
+/* Modern EV Mobility Design System */
+:root {
+  --primary: #10B981;
+  --primary-hover: #059669;
+  --primary-light: #ECFDF5;
+  --primary-border: #A7F3D0;
+  --accent-cyan: #06B6D4;
+  --dark-bg: #0F172A;
+  --dark-surface: #1E293B;
+  --dark-border: #334155;
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+  --card-bg: #FFFFFF;
+  --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  --card-hover-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.12), 0 10px 10px -5px rgba(16, 185, 129, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #1E293B;
+  background-color: #F8FAFC;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Glassmorphic Navbar */
+.app-navbar {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #E2E8F0;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  transition: all 0.2s ease;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, #10B981, #06B6D4);
+  color: white;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+}
+
+.brand-text {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #0F172A, #10B981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Nav Links */
+.nav-link-custom {
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.nav-link-custom:hover {
+  color: #10B981;
+  background-color: #ECFDF5;
+}
+
+.nav-link-custom.active {
+  color: #059669;
+  background-color: #D1FAE5;
+  font-weight: 700;
+}
+
+/* Button Variants */
+.btn-emerald {
+  background-color: #10B981;
+  color: white;
+  font-weight: 600;
+  border: none;
+  padding: 0.55rem 1.25rem;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+}
+
+.btn-emerald:hover {
+  background-color: #059669;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+.btn-outline-emerald {
+  border: 1.5px solid #10B981;
+  color: #059669;
+  background: transparent;
+  font-weight: 600;
+  padding: 0.5rem 1.15rem;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-emerald:hover {
+  background-color: #ECFDF5;
+  color: #047857;
+  border-color: #059669;
+}
+
+/* Modern Card */
+.ev-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #E2E8F0;
+  box-shadow: var(--card-shadow);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.ev-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--card-hover-shadow);
+  border-color: var(--primary-border);
+}
+
+/* Status Badges */
+.badge-available {
+  background-color: #DCFCE7;
+  color: #15803D;
+  font-weight: 700;
+  border: 1px solid #86EFAC;
+}
+
+.badge-occupied {
+  background-color: #FEE2E2;
+  color: #B91C1C;
+  font-weight: 700;
+  border: 1px solid #FCA5A5;
+}
+
+.badge-reserved {
+  background-color: #FEF3C7;
+  color: #B45309;
+  font-weight: 700;
+  border: 1px solid #FCD34D;
+}
+
+.badge-maintenance {
+  background-color: #F1F5F9;
+  color: #64748B;
+  font-weight: 700;
+  border: 1px solid #CBD5E1;
+}
+
+/* Charging Pulse Simulation */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 20px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.charging-pulse-indicator {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #10B981;
+  animation: pulse-ring 2s infinite cubic-bezier(0.45, 0, 0.55, 1);
+}
+
+/* Live Circle Battery Display */
+.battery-circle-container {
+  width: 220px;
+  height: 220px;
+  position: relative;
+  margin: 0 auto;
+}
+
+/* Footer */
+.app-footer {
+  background-color: #0F172A;
+  color: #94A3B8;
+  padding: 3rem 0 1.5rem 0;
+  margin-top: auto;
+  border-top: 1px solid #1E293B;
+}
+
+/* Metric Card */
+.metric-card {
+  background: white;
+  border-radius: 14px;
+  border: 1px solid #E2E8F0;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.metric-icon-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Dark EV cards — used with App.jsx text-light / page text-white */
+.card.card-custom,
+.card-custom {
+  background-color: #1E293B;
+  color: #E2E8F0;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.45);
+}
+
+.card.card-custom .card-body,
+.card-custom .card-body {
+  color: #E2E8F0;
+}
+
+.card-custom h1,
+.card-custom h2,
+.card-custom h3,
+.card-custom h4,
+.card-custom h5,
+.card-custom h6 {
+  color: #F8FAFC;
+}
+
+.card-custom .text-muted {
+  color: #94A3B8 !important;
+}
+
+.card-custom .table {
+  --bs-table-color: #E2E8F0;
+  --bs-table-bg: transparent;
+  --bs-table-border-color: #334155;
+  --bs-table-hover-bg: #0F172A;
+  --bs-table-hover-color: #F8FAFC;
+  color: #E2E8F0;
+}
+
+.card-custom .table-dark {
+  --bs-table-bg: #0F172A;
+  --bs-table-color: #E2E8F0;
+  --bs-table-border-color: #334155;
+  --bs-table-striped-bg: #1E293B;
+  --bs-table-hover-bg: #334155;
+}
+
+/* Dark form controls used on dashboards, stations, and modals */
+.form-control.form-control-custom,
+.form-select.form-control-custom,
+.form-control-custom {
+  background-color: #0F172A;
+  color: #F8FAFC;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.form-control.form-control-custom::placeholder,
+.form-control-custom::placeholder {
+  color: #94A3B8;
+  opacity: 1;
+}
+
+.form-control.form-control-custom:focus,
+.form-select.form-control-custom:focus,
+.form-control-custom:focus {
+  background-color: #0F172A;
+  color: #F8FAFC;
+  border-color: #10B981;
+  box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.25);
+}
+
+.form-control.form-control-custom:disabled,
+.form-select.form-control-custom:disabled,
+.form-control-custom:disabled {
+  background-color: #1E293B;
+  color: #94A3B8;
+  border-color: #334155;
+  opacity: 1;
+}
+
+.form-select.form-control-custom option,
+.form-control-custom option {
+  background-color: #0F172A;
+  color: #F8FAFC;
+}
+
+.form-control-custom:-webkit-autofill,
+.form-control-custom:-webkit-autofill:hover,
+.form-control-custom:-webkit-autofill:focus {
+  -webkit-text-fill-color: #F8FAFC;
+  caret-color: #F8FAFC;
+  box-shadow: 0 0 0 1000px #0F172A inset;
+  transition: background-color 9999s ease-out;
+}
+/* =========================================================
+   GLOBAL DARK BACKGROUND TEXT VISIBILITY
+   ========================================================= */
+
+/* Default text for dark surfaces */
+.bg-dark,
+.bg-black,
+.card-custom,
+.modal-content {
+  color: #E2E8F0;
+}
+
+/* Headings on dark surfaces */
+.bg-dark h1,
+.bg-dark h2,
+.bg-dark h3,
+.bg-dark h4,
+.bg-dark h5,
+.bg-dark h6,
+.bg-black h1,
+.bg-black h2,
+.bg-black h3,
+.bg-black h4,
+.bg-black h5,
+.bg-black h6,
+.card-custom h1,
+.card-custom h2,
+.card-custom h3,
+.card-custom h4,
+.card-custom h5,
+.card-custom h6,
+.modal-content h1,
+.modal-content h2,
+.modal-content h3,
+.modal-content h4,
+.modal-content h5,
+.modal-content h6 {
+  color: #F8FAFC;
+}
+
+/* Normal text on dark surfaces */
+.bg-dark p,
+.bg-dark label,
+.bg-black p,
+.bg-black label,
+.card-custom p,
+.card-custom label,
+.modal-content p,
+.modal-content label {
+  color: #E2E8F0;
+}
+
+/* Keep intentionally muted text readable */
+.bg-dark .text-muted,
+.bg-black .text-muted,
+.card-custom .text-muted,
+.modal-content .text-muted {
+  color: #94A3B8 !important;
+}
+
+/* Explicit Bootstrap light/white text */
+.text-light {
+  color: #E2E8F0 !important;
+}
+
+.text-white {
+  color: #F8FAFC !important;
+}
+
+/* Tables on dark backgrounds */
+.table-dark {
+  color: #E2E8F0;
+}
+
+.table-dark th {
+  color: #F8FAFC;
+}
+
+.table-dark td {
+  color: #E2E8F0;
+}
+
+/* Dark form controls */
+.form-control,
+.form-select {
+  color: #1E293B;
+}
+
+.form-control-custom,
+.form-select.form-control-custom {
+  color: #F8FAFC !important;
+}
+
+/* Placeholder text */
+.form-control-custom::placeholder {
+  color: #94A3B8 !important;
+  opacity: 1;
+}
+
+/* Keep status/accent colors untouched */
+.text-success {
+  color: #22C55E !important;
+}
+
+.text-warning {
+  color: #F59E0B !important;
+}
+
+.text-danger {
+  color: #EF4444 !important;
+}
+
+.text-info {
+  color: #06B6D4 !important;
+}
+
+.text-primary {
+  color: #10B981 !important;
+}
