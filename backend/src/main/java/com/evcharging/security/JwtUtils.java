@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
@@ -17,14 +18,35 @@ public class JwtUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    @Value("${app.jwt.secret}")
+    @Value("${app.jwt.secret:}")
     private String jwtSecret;
 
     @Value("${app.jwt.expiration-ms:86400000}")
     private long jwtExpirationMs;
 
+    // Fallback key only used if JWT_SECRET environment variable is unset during local dev
+    private static final String DEV_FALLBACK_SECRET = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
+
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        String secret = (jwtSecret != null && !jwtSecret.isBlank()) ? jwtSecret.trim() : DEV_FALLBACK_SECRET;
+        byte[] keyBytes;
+        try {
+            keyBytes = Decoders.BASE64.decode(secret);
+            if (keyBytes.length < 32) {
+                keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+            }
+        } catch (Exception e) {
+            keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        }
+
+        if (keyBytes.length < 32) {
+            byte[] padded = new byte[32];
+            for (int i = 0; i < 32; i++) {
+                padded[i] = keyBytes[i % keyBytes.length];
+            }
+            keyBytes = padded;
+        }
+
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

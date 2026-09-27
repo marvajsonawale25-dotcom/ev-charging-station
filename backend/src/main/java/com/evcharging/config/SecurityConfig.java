@@ -99,6 +99,7 @@ public class SecurityConfig {
         if (allowedOrigins != null && !allowedOrigins.isBlank()) {
             Arrays.stream(allowedOrigins.split(","))
                     .map(String::trim)
+                    .map(s -> s.replaceAll("/+$", ""))
                     .filter(s -> !s.isEmpty())
                     .forEach(s -> {
                         if (!origins.contains(s)) {
