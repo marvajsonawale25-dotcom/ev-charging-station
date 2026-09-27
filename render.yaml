@@ -9,24 +9,29 @@ databases:
 
 services:
   # ==========================================
-  # Spring Boot Backend Web Service
+  # Spring Boot Backend (Docker Runtime for Java 17)
   # ==========================================
   - type: web
     name: ev-charging-backend
-    runtime: java
-    rootDir: backend
-    buildCommand: ./mvnw clean package -DskipTests
-    startCommand: java -jar target/ev-charging-backend-1.0.0.jar
+    runtime: docker
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
     plan: free
     envVars:
-      - key: JAVA_VERSION
-        value: 17
       - key: PORT
-        value: 8080
+        value: "8080"
       - key: DB_URL
         fromDatabase:
           name: ev-charging-db
           property: connectionString
+      - key: DB_USERNAME
+        fromDatabase:
+          name: ev-charging-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: ev-charging-db
+          property: password
       - key: JWT_SECRET
         generateValue: true
       - key: FRONTEND_URL

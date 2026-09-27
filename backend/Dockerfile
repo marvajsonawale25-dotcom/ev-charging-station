@@ -2,21 +2,20 @@
 FROM eclipse-temurin:17-jdk-jammy AS build
 WORKDIR /app
 
-# Copy Maven Wrapper and POM first to leverage Docker layer caching
+# Copy Maven Wrapper and POM
 COPY .mvn/ .mvn/
 COPY mvnw pom.xml ./
 RUN chmod +x ./mvnw
-RUN ./mvnw dependency:go-offline -B
 
-# Copy source code and build production JAR
+# Copy source code and package executable JAR
 COPY src/ src/
 RUN ./mvnw clean package -DskipTests -B
 
-# Production runtime image
+# Production runtime image using Java 17 JRE
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
-# Create non-root user for security
+# Create non-root application user
 RUN groupadd -r spring && useradd -r -g spring spring
 USER spring:spring
 
