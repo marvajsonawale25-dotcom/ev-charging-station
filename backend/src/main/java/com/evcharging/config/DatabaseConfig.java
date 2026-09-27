@@ -22,7 +22,7 @@ public class DatabaseConfig {
         String username = properties.getUsername();
         String password = properties.getPassword();
 
-        // Support Render / cloud postgresql:// or postgres:// URI format and normalize to JDBC
+        // Safety fallback: normalize postgres:// or postgresql:// to jdbc:postgresql://
         if (url != null && (url.startsWith("postgres://") || url.startsWith("postgresql://"))) {
             try {
                 int slashSlashIndex = url.indexOf("://");
@@ -41,22 +41,24 @@ public class DatabaseConfig {
                 } else {
                     url = "jdbc:postgresql://" + url.substring(slashSlashIndex + 3);
                 }
-                log.info("Normalized PostgreSQL URI to JDBC format");
+                log.info("DatabaseConfig: Fallback normalized URL to: {}", url);
             } catch (Exception e) {
-                log.warn("Could not parse PostgreSQL URI, falling back to original URL: {}", e.getMessage());
+                log.warn("DatabaseConfig: Error normalizing URL: {}", e.getMessage());
             }
         }
 
-        HikariDataSource dataSource = properties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
-        if (url != null) {
-            dataSource.setJdbcUrl(url);
-        }
-        if (username != null && !username.isBlank()) {
-            dataSource.setUsername(username);
-        }
-        if (password != null) {
-            dataSource.setPassword(password);
-        }
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setDriverClassName(properties.determineDriverClassName());
+        dataSource.setJdbcUrl(url != null ? url : properties.determineUrl());
+        dataSource.setUsername(username != null ? username : properties.determineUsername());
+        dataSource.setPassword(password != null ? password : properties.determinePassword());
+
+        // Resilient pool settings for cloud database connections
+        dataSource.setConnectionTimeout(30000);
+        dataSource.setValidationTimeout(5000);
+        dataSource.setMaximumPoolSize(10);
+        dataSource.setMinimumIdle(2);
+
         return dataSource;
     }
 }
